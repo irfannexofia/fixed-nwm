@@ -1,0 +1,6 @@
+deploy/
+deploy_www.tar.gz
+.DS_Store
+Thumbs.db
+node_modules/
+*.log

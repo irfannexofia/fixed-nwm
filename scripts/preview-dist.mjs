@@ -7,7 +7,9 @@ const app = express();
 app.use(express.json({ limit: '1mb' }));
 const PORT = process.env.PORT || 5176;
 
-const rootDir = path.resolve('dist/spa');
+// Prefer consolidated deploy folder if present; fallback to dist/spa
+const deployRoot = path.resolve('deploy/www');
+const rootDir = fs.existsSync(deployRoot) ? deployRoot : path.resolve('dist/spa');
 const rootIndex = path.join(rootDir, 'index.html');
 // Netpiu replacement app (built from install dashboard svelte-app)
 const netpiuDir = path.resolve('dist/netpiu');
@@ -40,7 +42,11 @@ if (appDir) {
 }
 app.use(express.static(rootDir));
 // Serve Netpiu app assets under /assets to satisfy absolute asset paths
-if (fs.existsSync(netpiuDir)) {
+// Serve /assets: if root has assets use that; otherwise map to netpiu assets
+const rootAssets = path.join(rootDir, 'assets');
+if (fs.existsSync(rootAssets)) {
+  app.use('/assets', express.static(rootAssets));
+} else if (fs.existsSync(netpiuDir)) {
   const netpiuAssets = path.join(netpiuDir, 'assets');
   if (fs.existsSync(netpiuAssets)) {
     app.use('/assets', express.static(netpiuAssets));
@@ -106,7 +112,7 @@ function getLanAddress() {
 // Recreate listener to bind on 0.0.0.0 and show LAN URL
 app.listen(Number(PORT), '0.0.0.0', () => {
   const lan = getLanAddress();
-  console.log(`[preview-dist] Serving dist/spa on http://localhost:${PORT}`);
+  console.log(`[preview-dist] Serving ${rootDir.includes('deploy') ? 'deploy/www' : 'dist/spa'} on http://localhost:${PORT}`);
   if (lan) {
     console.log(`[preview-dist] LAN Access: http://${lan}:${PORT}`);
   }
