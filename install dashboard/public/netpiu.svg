@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Netpiu logo">
+  <title>Netpiu</title>
+  <rect x="2" y="2" width="20" height="20" rx="6" fill="#7c3aed"/>
+  <circle cx="9" cy="10" r="2" fill="#ffffff"/>
+  <path d="M12 9v6c0 1.657 1.343 3 3 3h2" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none"/>
+</svg>
